@@ -25,5 +25,7 @@ workflows:
     jobs:
       - tar:
           use-pigz: false
+          name: tar-as-usual
       - tar:
           use-pigz: true
+          name: tar-with-pigz
