@@ -6,7 +6,8 @@ jobs:
       use-pigz:
         type: boolean
     docker:
-      - image:
+      - image: cimg/ruby:2.6.6-node
+    resource_class: large
     steps:
       - setup_remote_docker
       - run: docker pull kelvintaywl/large:15GB
