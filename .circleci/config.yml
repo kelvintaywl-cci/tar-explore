@@ -2,8 +2,11 @@ version: 2.1
 
 jobs:
   test:
+    parameters:
+      tag:
+        type: string
     docker:
-      - image: kelvintaywl/ci-128877:latest
+      - image: kelvintaywl/ci-128877:<< parameters.tag >>
     resource_class: large
     steps:
       - checkout
@@ -11,4 +14,9 @@ jobs:
 workflows:
   main:
     jobs:
-      - test
+      - test:
+          name: failed
+          tag: latest
+      - test:
+          name: succeeded
+          tag: success
