@@ -1,31 +1,18 @@
 version: 2.1
 
+parameters:
+  service:
+    type: string
+    default: "foobar"
+
 jobs:
   tar:
-    parameters:
-      use-pigz:
-        type: boolean
     docker:
-      - image: cimg/ruby:2.6.6-node
-    resource_class: large
+      - image: cimg/base:current
+    resource_class: small
     steps:
-      - setup_remote_docker
-      - run: docker pull kelvintaywl/large:15GB
-      - run: mkdir images
-      - run: docker save -o images/kelvintaywl-large-15GB.tar kelvintaywl/large:15GB
-      - when:
-          condition: << parameters.use-pigz >>
-          steps:
-            - run: sudo apt install pigz
-      - run:
-          time tar <<#parameters.use-pigz>>-I pigz -cvf<</parameters.use-pigz>><<^parameters.use-pigz>>-cvzf<</parameters.use-pigz>> images.tar.gz images
-
+      - checkout
 workflows:
-  main:
+  <<pipeline.parameters.service>>-main:
     jobs:
-      - tar:
-          use-pigz: false
-          name: tar-as-usual
-      - tar:
-          use-pigz: true
-          name: tar-with-pigz
+      - tar
